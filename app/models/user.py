@@ -17,11 +17,11 @@ class User(db.Model):
 
     posts = db.relationship('Post',
                             backref='author',
-                            lazy='dynamic',
+                            lazy=True,
                             cascade='all, delete-orphan')
     likes = db.relationship('Like',
                             backref='author',
-                            lazy='dynamic')
+                            lazy=True)
 
     def update_last_login(self):
         self.last_login = datetime.utcnow()

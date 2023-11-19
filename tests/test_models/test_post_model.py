@@ -53,8 +53,8 @@ def test_post_model_basic(app):
         assert post.slug == 'test-post'
         #
         # # Additional check for the association with the author (user)
-        assert user.posts.count() == 1
-        assert user.posts.first() == post
+        assert len(user.posts) == 1
+        assert post in user.posts
 
 
 def test_post_generate_slug_no_title(app):

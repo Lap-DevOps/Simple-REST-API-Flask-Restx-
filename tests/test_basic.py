@@ -8,13 +8,13 @@ from app import create_app, db
 def app(monkeypatch) -> Flask:
     """Provides an instance of our Flask app with a specific configuration."""
 
-    # Set the environment to 'testing'
     monkeypatch.setenv("FLASK_ENV", 'testing')
-
-    # Create the Flask app
     app = create_app()
-
-    return app
+    with app.app_context():
+        db.create_all()
+        yield app
+        db.session.remove()
+        db.drop_all()
 
 
 def test_app_exists(app):
@@ -31,6 +31,8 @@ def test_app_settings(app):
     """Test specific settings of the Flask app."""
     assert app.config['DEBUG'] is True
     assert app.config['TESTING'] is True
+    assert current_app.config['DEBUG'] is True
+    assert current_app.config['TESTING'] is True
 
 
 def test_sqlalchemy_database_uri(app):
