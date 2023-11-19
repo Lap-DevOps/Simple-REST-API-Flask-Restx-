@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 
+from slugify import slugify
 from sqlalchemy import DateTime
 from sqlalchemy.orm import validates
 
@@ -25,9 +26,10 @@ class Post(db.Model):
         return title
 
     def generate_slug(self, title):
-        pattern = r'[^\w+]'
+        # pattern = r'[^\w+]'
         if title:
-            self.slug = re.sub(pattern, '-', title)
+            # self.slug = re.sub(pattern, '-', title).lower()
+            self.slug = slugify(title)
 
     def __repr__(self):
         return f"Post(id={self.id}, title={self.title}, date_posted={self.date_posted.strftime('%d.%m.%Y-%H.%M')}, author_id={self.author_id})"
