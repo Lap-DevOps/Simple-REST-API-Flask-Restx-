@@ -15,12 +15,18 @@ class Post(db.Model):
     title = db.Column(db.String(200), unique=False, nullable=False, index=True)
     content = db.Column(db.Text(), nullable=False)
     slug = db.Column(db.String(140), unique=True)
-    date_posted = db.Column(DateTime(), nullable=False, default=datetime.now, index=True)
+    date_posted = db.Column(
+        DateTime(), nullable=False, default=datetime.now, index=True
+    )
 
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    likes = db.relationship('Like', backref='post', lazy=True, cascade="all, delete-orphan")
+    author_id = db.Column(
+        db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    likes = db.relationship(
+        "Like", backref="post", lazy=True, cascade="all, delete-orphan"
+    )
 
-    @validates('title')
+    @validates("title")
     def validate_title(self, key, title):
         self.generate_slug(title)
         return title

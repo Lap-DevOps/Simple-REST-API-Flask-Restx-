@@ -13,7 +13,7 @@ from app.models.user import User
 def app(monkeypatch) -> Flask:
     """Provides an instance of our Flask app with a specific configuration."""
 
-    monkeypatch.setenv("FLASK_ENV", 'testing')
+    monkeypatch.setenv("FLASK_ENV", "testing")
     app = create_app()
     with app.app_context():
         db.create_all()
@@ -23,18 +23,20 @@ def app(monkeypatch) -> Flask:
 
 
 def test_sqlalchemy_database_uri(app):
-    assert app.config['SQLALCHEMY_DATABASE_URI'] == 'sqlite:///:memory:'
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///:memory:"
 
 
 def test_like_model_basic(app):
     with app.app_context():
         # Create a test user
-        user = User(username='testuser', email='test@example.com', password='testpassword')
+        user = User(
+            username="testuser", email="test@example.com", password="testpassword"
+        )
         db.session.add(user)
         db.session.commit()
 
         # Create a test post
-        post = Post(title='Test Post', content='This is a test post', author=user)
+        post = Post(title="Test Post", content="This is a test post", author=user)
         db.session.add(post)
         db.session.commit()
 
@@ -58,12 +60,14 @@ def test_like_model_basic(app):
 def test_like_repr(app):
     with app.app_context():
         # Create test user
-        user = User(username='testuser', email='test@example.com', password='testpassword')
+        user = User(
+            username="testuser", email="test@example.com", password="testpassword"
+        )
         db.session.add(user)
         db.session.commit()
 
         # Create test post
-        post = Post(title='Test Post', content='This is a test post', author=user)
+        post = Post(title="Test Post", content="This is a test post", author=user)
         db.session.add(post)
         db.session.commit()
 
