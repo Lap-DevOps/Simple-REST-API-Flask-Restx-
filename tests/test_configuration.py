@@ -1,12 +1,14 @@
 import os
+
 import pytest
+
 from app import create_app
 
 
 def test_config_development(monkeypatch):
     """Test the configuration settings for the development environment."""
     # Set the environment to 'development'
-    monkeypatch.setenv("FLASK_ENV", 'development')
+    monkeypatch.setenv("FLASK_ENV", "development")
 
     # Create the Flask app
     app = create_app()
@@ -19,7 +21,7 @@ def test_config_development(monkeypatch):
 def test_config_testing(monkeypatch):
     """Test the configuration settings for the testing environment."""
     # Set the environment to 'testing'
-    monkeypatch.setenv("FLASK_ENV", 'testing')
+    monkeypatch.setenv("FLASK_ENV", "testing")
 
     # Create the Flask app
     app = create_app()
@@ -30,13 +32,13 @@ def test_config_testing(monkeypatch):
     assert app.config["TESTING"] is True
     assert app.config["PRESERVE_CONTEXT_ON_EXCEPTION"] is False
     assert app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] is False
-    assert app.config['SQLALCHEMY_DATABASE_URI'] == 'sqlite:///:memory:'
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///:memory:"
 
 
 def test_config_production(monkeypatch):
     """Test the configuration settings for the production environment."""
     # Set the environment to 'production'
-    monkeypatch.setenv("FLASK_ENV", 'production')
+    monkeypatch.setenv("FLASK_ENV", "production")
 
     # Create the Flask app
     app = create_app()
