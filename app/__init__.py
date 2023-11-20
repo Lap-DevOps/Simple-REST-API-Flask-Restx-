@@ -42,9 +42,10 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    api.init_app(app)
+    api.init_app(app, validate=True)
     from app.resurses.user_resourse_v1 import user_namespace
+
     # api.add_namespace(post_namespace, path="/api/post")
-    api.add_namespace(user_namespace, path='/api/user')
+    api.add_namespace(user_namespace, path="/api/user")
 
     return app

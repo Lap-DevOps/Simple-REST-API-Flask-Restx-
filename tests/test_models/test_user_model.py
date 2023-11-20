@@ -24,9 +24,6 @@ def app(monkeypatch) -> Flask:
         db.drop_all()
 
 
-
-
-
 def test_sqlalchemy_database_uri(app):
     assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///:memory:"
 
@@ -94,7 +91,7 @@ def test_public_id(app):
             assert False, "'public_id' is not a valid UUID"
         else:
             assert (
-                    str(uuid_obj) == retrieved_user.public_id
+                str(uuid_obj) == retrieved_user.public_id
             ), "'public_id' is not a valid UUID string"
 
 
