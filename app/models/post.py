@@ -20,7 +20,7 @@ class Post(db.Model):
     )
 
     author_id = db.Column(
-        db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        db.String(50), db.ForeignKey("users.public_id", ondelete="CASCADE"), nullable=False
     )
     likes = db.relationship(
         "Like", backref="post", lazy=True, cascade="all, delete-orphan"

@@ -16,6 +16,7 @@ class User(db.Model):
     )
     username = db.Column(db.String(120), unique=True, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
+    is_admin = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(256))
     member_since = db.Column(db.DateTime(), default=datetime.utcnow())
     last_login = db.Column(db.DateTime(), nullable=True)
