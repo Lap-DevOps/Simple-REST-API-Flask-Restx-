@@ -105,7 +105,7 @@ def test_post_repr(app):
         db.session.commit()
 
         # Retrieve the post from the database
-        retrieved_post = Post.query.filter_by(author_id=user.id).first()
+        retrieved_post = Post.query.filter_by(author_id=user.public_id).first()
 
         # Check that the __repr__ function returns the expected string
         expected_repr = f"Post(id={retrieved_post.id}, title={retrieved_post.title}, date_posted={retrieved_post.date_posted.strftime('%d.%m.%Y-%H.%M')}, author_id={retrieved_post.author_id})"
@@ -126,7 +126,7 @@ def test_slug_change(app):
         db.session.add(post)
         db.session.commit()
 
-        retrieved_post = Post.query.filter_by(author_id=user.id).first()
+        retrieved_post = Post.query.filter_by(author_id=user.public_id).first()
         assert retrieved_post.title == "Test Post"
         assert post.slug == "test-post"
 
@@ -134,7 +134,7 @@ def test_slug_change(app):
         db.session.add(retrieved_post)
         db.session.commit()
 
-        new_retrieved_post = Post.query.filter_by(author_id=user.id).first()
+        new_retrieved_post = Post.query.filter_by(author_id=user.public_id).first()
 
         assert new_retrieved_post.title == "New test post"
         assert new_retrieved_post.slug == "new-test-post"

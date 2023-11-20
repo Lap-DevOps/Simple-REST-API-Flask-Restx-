@@ -21,7 +21,7 @@ user_namespace = Namespace("user", description="User operations")
 @user_namespace.route("/")
 class AllUsers(Resource):
     # Document the expected query parameters for the 'get' operation
-    @user_namespace.doc(params={"limit": "limit", "page": "page"})
+    @user_namespace.doc(params={"limit": "Limit for pagination", "page": "Page number"})
     # Specify the response model and status code for the 'get' operation
     @user_namespace.marshal_with(
         all_users_response_model, as_list=False, code=200, mask=None
@@ -34,8 +34,13 @@ class AllUsers(Resource):
 
         try:
             # Paginate the users and retrieve the current page items
-            paginated_users = User.query.paginate(page=page, per_page=limit)
-            users = paginated_users.items
+            if limit is None:
+                # If the per_page parameter is not specified, return all records
+                users = User.query.all()
+            else:
+                # Otherwise, use pagination
+                paginated_users = User.query.paginate(page=page, per_page=limit)
+                users = paginated_users.items
 
             # Serialize user data using SimplUserSchema
             users_schema = SimplUserSchema(many=True)
@@ -51,6 +56,7 @@ class AllUsers(Resource):
             # Handle exceptions and return a 500 status code on error
             print(e)
             return {"message": "Internal Server Error"}, 500
+
 
     # Specify the expected input model, response model, and status code for the 'post' operation
     @user_namespace.expect(user_input_model, validate=True)
@@ -79,8 +85,6 @@ class AllUsers(Resource):
         except ValidationError as e:
             # Handle payload validation errors and return a 400 status code with error messages
             abort(400, f"Error validating user data: {str(e.messages)}")
-
-
 
         except Exception as e:
             # Handle other exceptions (e.g., database-related errors)

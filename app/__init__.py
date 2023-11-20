@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.config import config
 
+
 db = SQLAlchemy()
 migrate = Migrate(db)
 bcrypt = Bcrypt()
@@ -44,8 +45,9 @@ def create_app() -> Flask:
     bcrypt.init_app(app)
     api.init_app(app, validate=True)
     from app.resurses.user_resourse_v1 import user_namespace
+    from app.resurses.post_resourse_v1 import post_namespace
 
-    # api.add_namespace(post_namespace, path="/api/post")
+    api.add_namespace(post_namespace, path="/api/post")
     api.add_namespace(user_namespace, path="/api/user")
 
     return app

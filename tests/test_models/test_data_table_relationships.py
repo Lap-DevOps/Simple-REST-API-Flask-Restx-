@@ -207,7 +207,7 @@ def test_post_backref_to_user(app):
 
         # Check the backref from post to user
         assert post.author == user
-        assert post.author_id == user.id
+        assert post.author_id == user.public_id
         assert len(user.posts) == 1
         assert user.posts[0] == post
 
