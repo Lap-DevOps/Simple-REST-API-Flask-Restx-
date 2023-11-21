@@ -3,7 +3,6 @@ from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
     jwt_required,
-    get_jwt,
     create_refresh_token,
 )
 from flask_restx import Namespace, Resource, abort
@@ -73,8 +72,6 @@ class UserLogin(Resource):
     def post(self):
         """Login user"""
 
-        # TODO user last login
-
         if get_jwt_identity():
             return jsonify({"message": "User is already logged in"}), 401
 
@@ -84,6 +81,9 @@ class UserLogin(Resource):
             user = User.query.filter_by(email=data["email"]).one_or_none()
             if not user or not user.verify_password(data["password"]):
                 return {"message": "Invalid email or password"}, 401
+
+            # set user login date
+            user.update_last_login()
 
             access_token = create_access_token(identity=user.public_id, fresh=True)
             refresh_token = create_refresh_token(identity=user.public_id)
