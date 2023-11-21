@@ -1,22 +1,14 @@
 from flask import jsonify
-from flask_jwt_extended import (
-    create_access_token,
-    get_jwt_identity,
-    jwt_required,
-    create_refresh_token,
-)
+from flask_jwt_extended import (create_access_token, create_refresh_token,
+                                get_jwt_identity, jwt_required)
 from flask_restx import Namespace, Resource, abort
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 
 from app import db
-from app.auth.auth_schema import (
-    login_request_data,
-    login_response_model,
-    UserInputSchema,
-    user_model,
-    user_input_model,
-)
+from app.auth.auth_schema import (UserInputSchema, login_request_data,
+                                  login_response_model, user_input_model,
+                                  user_model)
 from app.models.user import User
 
 auth_namespace = Namespace("auth", description="Auth operations")

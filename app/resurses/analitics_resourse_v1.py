@@ -9,7 +9,8 @@ from app import db
 from app.extensions import authorizations
 from app.models.like import Like
 from app.models.user import User
-from app.schemas.analytics_schema import user_activity_model, like_stats_response_model
+from app.schemas.analytics_schema import (like_stats_response_model,
+                                          user_activity_model)
 
 analytics_namespace = Namespace(
     "analytics", description="Analytics", authorizations=authorizations
