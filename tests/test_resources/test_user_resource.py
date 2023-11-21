@@ -121,11 +121,23 @@ def test_create_user(client):
     assert "member_since" in response.json
 
 
-@pytest.mark.parametrize("invalid_payload, expected_error", [
-    ({"username": "", "email": "user@tast.com", "password": "password"}, "Username must be at least 4 characters long"),
-    ({"username": "user", "email": "invalid_email", "password": "password"}, "Invalid email format"),
-    ({"username": "user", "email": "user@tast.com", "password": "short"}, "Password must be at least 8 characters long"),
-])
+@pytest.mark.parametrize(
+    "invalid_payload, expected_error",
+    [
+        (
+            {"username": "", "email": "user@tast.com", "password": "password"},
+            "Username must be at least 4 characters long",
+        ),
+        (
+            {"username": "user", "email": "invalid_email", "password": "password"},
+            "Invalid email format",
+        ),
+        (
+            {"username": "user", "email": "user@tast.com", "password": "short"},
+            "Password must be at least 8 characters long",
+        ),
+    ],
+)
 def test_create_user_validation_errors(client, invalid_payload, expected_error):
     """Test user creation with validation errors"""
 
@@ -134,7 +146,6 @@ def test_create_user_validation_errors(client, invalid_payload, expected_error):
     assert response.status_code == 400
     assert "message" in response.json
     assert expected_error in response.json["message"]
-
 
 
 if __name__ == "__main__":

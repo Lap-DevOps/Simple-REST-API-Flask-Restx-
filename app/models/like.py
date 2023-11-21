@@ -7,8 +7,8 @@ class Like(db.Model):
     __tablename__ = "likes"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
-        db.Integer,
-        db.ForeignKey("users.id", ondelete="CASCADE"),
+        db.String(50),
+        db.ForeignKey("users.public_id", ondelete="CASCADE"),
         nullable=False,
     )
     post_id = db.Column(

@@ -2,6 +2,7 @@ from flask import request
 from flask_restx import Namespace, Resource
 from flask_restx.errors import abort
 from marshmallow.exceptions import ValidationError
+from werkzeug.exceptions import HTTPException
 
 from app import db
 from app.models.user import User
@@ -52,11 +53,12 @@ class AllUsers(Resource):
 
             # Return the response data with a 200 status code
             return response_data, 200
-        except Exception as e:
-            # Handle exceptions and return a 500 status code on error
-            print(e)
-            return {"message": "Internal Server Error"}, 500
+        except HTTPException as e:
+            # Handle exceptions and return a status code on error
+            abort(e.code, f"Error receiving users.")
 
+        except Exception as e:
+            abort(500, massage="Internal Server Error")
 
     # Specify the expected input model, response model, and status code for the 'post' operation
     @user_namespace.expect(user_input_model, validate=True)
@@ -86,7 +88,10 @@ class AllUsers(Resource):
             # Handle payload validation errors and return a 400 status code with error messages
             abort(400, f"Error validating user data: {str(e.messages)}")
 
-        except Exception as e:
+        except HTTPException as e:
             # Handle other exceptions (e.g., database-related errors)
             db.session.rollback()
-            abort(500, f"Error creating user.")
+            abort(e.code, f"Error creating user.")
+
+        except Exception as e:
+            abort(500, massage="Internal Server Error")

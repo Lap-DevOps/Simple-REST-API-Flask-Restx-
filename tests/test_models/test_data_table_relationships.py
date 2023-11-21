@@ -40,16 +40,16 @@ def test_like_relationships(app):
         db.session.commit()
 
         # Создаем тестовый лайк
-        like = Like(user_id=user.id, post_id=post.id)
+        like = Like(user_id=user.public_id, post_id=post.id)
         db.session.add(like)
         db.session.commit()
 
         # Получаем лайк из базы данных
-        retrieved_like = Like.query.filter_by(user_id=user.id).first()
+        retrieved_like = Like.query.filter_by(user_id=user.public_id).first()
 
         # Проверяем связи между таблицами
         assert retrieved_like is not None
-        assert retrieved_like.user_id == user.id
+        assert retrieved_like.user_id == user.public_id
         assert retrieved_like.post_id == post.id
 
 
@@ -77,7 +77,7 @@ def test_user_post_like_relationships(app):
         assert len(post.likes) == 0
 
         # Create a like for the post
-        like = Like(user_id=user.id, post_id=post.id)
+        like = Like(user_id=user.public_id, post_id=post.id)
         db.session.add(like)
         db.session.commit()
 
@@ -88,9 +88,9 @@ def test_user_post_like_relationships(app):
         assert user.likes == [like]
 
         # Check that the like now has the user and post
-        assert like.user_id == user.id
+        assert like.user_id == user.public_id
         assert like.post_id == post.id
-        assert isinstance(like.user_id, int)
+        assert isinstance(like.user_id, str)
         assert isinstance(like.post_id, int)
 
 
@@ -166,8 +166,8 @@ def test_user_has_multiple_posts_and_likes(app):
         assert Like.query.count() == 0
 
         # Create two likes for the posts
-        like1 = Like(user_id=user.id, post_id=post1.id)
-        like2 = Like(user_id=user.id, post_id=post2.id)
+        like1 = Like(user_id=user.public_id, post_id=post1.id)
+        like2 = Like(user_id=user.public_id, post_id=post2.id)
         db.session.add_all([like1, like2])
         db.session.commit()
 
@@ -184,10 +184,10 @@ def test_user_has_multiple_posts_and_likes(app):
         assert like2 in user.likes
 
         # # Check that each like has a reference to the user and post
-        assert like1.user_id == user.id
+        assert like1.user_id == user.public_id
         assert like1.post_id == post1.id
         #
-        assert like2.user_id == user.id
+        assert like2.user_id == user.public_id
         assert like2.post_id == post2.id
 
 
@@ -227,13 +227,13 @@ def test_like_backref(app):
         db.session.commit()
 
         # Create a like for the post
-        like = Like(user_id=user.id, post_id=post.id)
+        like = Like(user_id=user.public_id, post_id=post.id)
         db.session.add(like)
         db.session.commit()
 
         # Check the back reference from the like to the user
         assert like.author == user
-        assert like.user_id == user.id
+        assert like.user_id == user.public_id
 
         # Check the back reference from the like to the post
         assert like.post == post

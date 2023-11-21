@@ -40,18 +40,18 @@ def test_like_model_basic(app):
         db.session.add(post)
         db.session.commit()
 
-        like = Like(user_id=user.id, post_id=post.id)
+        like = Like(user_id=user.public_id, post_id=post.id)
         db.session.add(like)
         db.session.commit()
 
         # Retrieve the post from the database
-        retrieved_like = Like.query.filter_by(user_id=user.id).first()
+        retrieved_like = Like.query.filter_by(user_id=user.public_id).first()
 
         assert like.id is not None
         assert retrieved_like.id is not None
         assert retrieved_like is not None
         assert retrieved_like is not None
-        assert retrieved_like.user_id == user.id
+        assert retrieved_like.user_id == user.public_id
         assert retrieved_like.post_id == post.id
         assert isinstance(retrieved_like.created_at, datetime)
         assert retrieved_like.created_at <= datetime.utcnow()
