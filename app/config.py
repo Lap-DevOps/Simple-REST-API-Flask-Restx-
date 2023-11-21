@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -12,10 +13,14 @@ if os.path.exists(dotenv_path):
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious_secret_key")
     SECURITY_PASSWORD_SALT = (
-        os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
+            os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
     )
     SECURITY_PASSWORD_HASH = "sha512_crypt"
     DEBUG = False
+    JWT_SECRET_KEY = 'very_hard_key'
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
+
 
     @staticmethod
     def init_app(app):
@@ -42,7 +47,7 @@ class TestingConfig(Config):
     RESTX_MASK_SWAGGER = True
 
     SQLALCHEMY_DATABASE_URI = (
-        os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
+            os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
     )
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False

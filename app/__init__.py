@@ -5,13 +5,14 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
 from app.config import config
-
 
 db = SQLAlchemy()
 migrate = Migrate(db)
 bcrypt = Bcrypt()
+jwt = JWTManager()
 
 api = Api(
     version="1.0",
@@ -44,12 +45,16 @@ def create_app() -> Flask:
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     api.init_app(app, validate=True)
+    jwt.init_app(app)
+
     from app.resurses.user_resourse_v1 import user_namespace
     from app.resurses.post_resourse_v1 import post_namespace
     from app.resurses.like_resourse_v1 import like_namespace
+    from app.auth.auth_resourse_v1 import auth_namespace
 
-    api.add_namespace(post_namespace, path="/api/post")
+    api.add_namespace(auth_namespace, path="/api/auth")
     api.add_namespace(user_namespace, path="/api/user")
+    api.add_namespace(post_namespace, path="/api/post")
     api.add_namespace(like_namespace, path="/api/post")
 
     return app
