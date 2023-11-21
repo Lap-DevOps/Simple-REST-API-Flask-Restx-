@@ -39,8 +39,12 @@ all_posts_response_model = api.model(
     "All Posts",
     {
         "total": fields.Integer(description="Total number of posts", required=True),
-        "data": fields.List(fields.Nested(simpl_post_model), description="List of posts", required=True,
-                            title="Posts:", ),
+        "data": fields.List(
+            fields.Nested(simpl_post_model),
+            description="List of posts",
+            required=True,
+            title="Posts:",
+        ),
     },
 )
 
@@ -59,6 +63,7 @@ delete_confirmation_model = api.model(
     },
 )
 
+
 class SimplPostSchema(Schema):
     id = ma_fields.String(attribute="id")
     title = ma_fields.String(attribute="title")
@@ -69,7 +74,9 @@ class SimplPostSchema(Schema):
 class PostInputSchema(Schema):
     title = ma_fields.String(
         required=True,
-        validate=validate.Length(min=4, error="Title must be at least 4 characters long"),
+        validate=validate.Length(
+            min=4, error="Title must be at least 4 characters long"
+        ),
         error_messages={
             "required": "Title is required",
             "null": "Title cannot be empty",
@@ -77,7 +84,9 @@ class PostInputSchema(Schema):
     )
     content = ma_fields.String(
         required=True,
-        validate=validate.Length(min=4, error="Content must be at least 4 characters long"),
+        validate=validate.Length(
+            min=4, error="Content must be at least 4 characters long"
+        ),
         error_messages={
             "required": "Title is required",
             "null": "Title cannot be empty",
