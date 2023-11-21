@@ -76,5 +76,3 @@ user_input_model = api.model(
         "password": fields.String(description="Password", required=True),
     },
 )
-
-

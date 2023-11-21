@@ -22,7 +22,6 @@ class AllUsers(Resource):
     # Specify the response model and status code for the 'get' operation
     @user_namespace.marshal_with(
         all_users_response_model, as_list=False, code=200, mask=None
-
     )
     @jwt_required()
     def get(self):

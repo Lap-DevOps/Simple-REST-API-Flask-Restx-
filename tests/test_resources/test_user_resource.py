@@ -50,7 +50,9 @@ def registered_user(app):
 def test_get_user_status_code(client, registered_user):
     # Example using data from the first user
     user1_data = registered_user["user1"]
-    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+    response = client.get(
+        "/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"}
+    )
 
     assert response.status_code == 200
 
@@ -58,7 +60,9 @@ def test_get_user_status_code(client, registered_user):
 def test_get_empty_user_list(client, registered_user):
     """Test for accessing the /api/user/ endpoint with an empty database."""
     user1_data = registered_user["user1"]
-    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+    response = client.get(
+        "/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"}
+    )
     assert response.status_code == 200
     assert b'"total": 2' in response.data
 
@@ -67,7 +71,9 @@ def test_get_one_user(client, registered_user):
     """Test for accessing the /api/user/ endpoint with a database containing one user."""
     user1_data = registered_user["user1"]
 
-    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+    response = client.get(
+        "/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"}
+    )
     assert response.status_code == 200
     assert b'"total": 2' in response.data
     assert b'"data":' in response.data
@@ -81,7 +87,9 @@ def test_get_two_users(client, registered_user):
     """Test for accessing the /api/user/ endpoint with a database containing two users."""
     user2_data = registered_user["user2"]
 
-    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user2_data['token']}"})
+    response = client.get(
+        "/api/user/", headers={"Authorization": f"Bearer {user2_data['token']}"}
+    )
     assert response.status_code == 200
     assert b'"total": 2' in response.data
     assert b'"data":' in response.data
@@ -110,16 +118,16 @@ def test_create_user(client):
     "invalid_payload, expected_error",
     [
         (
-                {"username": "", "email": "user@tast.com", "password": "password"},
-                "Username must be at least 4 characters long",
+            {"username": "", "email": "user@tast.com", "password": "password"},
+            "Username must be at least 4 characters long",
         ),
         (
-                {"username": "user", "email": "invalid_email", "password": "password"},
-                "Invalid email format",
+            {"username": "user", "email": "invalid_email", "password": "password"},
+            "Invalid email format",
         ),
         (
-                {"username": "user", "email": "user@tast.com", "password": "short"},
-                "Password must be at least 8 characters long",
+            {"username": "user", "email": "user@tast.com", "password": "short"},
+            "Password must be at least 8 characters long",
         ),
     ],
 )

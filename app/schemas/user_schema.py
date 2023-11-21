@@ -14,7 +14,6 @@ simpl_user_model = api.model(
 )
 
 
-
 # Response model for all users
 all_users_response_model = api.model(
     "All Users",
@@ -37,9 +36,3 @@ class SimplUserSchema(Schema):
     username = ma_fields.String(attribute="username")
     email = ma_fields.String(attribute="email")
     member_since = ma_fields.DateTime(attribute="member_since")
-
-
-
-
-
-
