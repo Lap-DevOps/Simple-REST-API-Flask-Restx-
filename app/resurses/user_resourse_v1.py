@@ -5,10 +5,7 @@ from flask_restx.errors import abort
 from werkzeug.exceptions import HTTPException
 
 from app.models.user import User
-from app.schemas.user_schema import (
-    all_users_response_model,
-    SimplUserSchema,
-)
+from app.schemas.user_schema import SimplUserSchema, all_users_response_model
 
 # Create a namespace for user operations
 user_namespace = Namespace("user", description="User operations")
@@ -22,7 +19,6 @@ class AllUsers(Resource):
     # Specify the response model and status code for the 'get' operation
     @user_namespace.marshal_with(
         all_users_response_model, as_list=False, code=200, mask=None
-
     )
     @jwt_required()
     def get(self):

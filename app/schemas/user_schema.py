@@ -1,5 +1,7 @@
 from flask_restx import fields
-from marshmallow import Schema, fields as ma_fields, validate
+from marshmallow import Schema
+from marshmallow import fields as ma_fields
+
 from app import api
 
 # User model for simplified representation
@@ -12,7 +14,6 @@ simpl_user_model = api.model(
         "member_since": fields.DateTime(description="Member Since", required=True),
     },
 )
-
 
 
 # Response model for all users
@@ -37,9 +38,3 @@ class SimplUserSchema(Schema):
     username = ma_fields.String(attribute="username")
     email = ma_fields.String(attribute="email")
     member_since = ma_fields.DateTime(attribute="member_since")
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Namespace, Resource
 from flask_restx.errors import abort
 from marshmallow.exceptions import ValidationError
@@ -8,14 +8,10 @@ from werkzeug.exceptions import HTTPException
 
 from app import db
 from app.models.post import Post
-from app.schemas.post_schema import (
-    all_posts_response_model,
-    SimplPostSchema,
-    post_model,
-    post_input_model,
-    PostInputSchema,
-    delete_confirmation_model,
-)
+from app.schemas.post_schema import (PostInputSchema, SimplPostSchema,
+                                     all_posts_response_model,
+                                     delete_confirmation_model,
+                                     post_input_model, post_model)
 
 post_namespace = Namespace("post", description="Post operations")
 

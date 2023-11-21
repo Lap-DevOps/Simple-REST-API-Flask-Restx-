@@ -62,7 +62,7 @@ def test_post_model_basic(app):
 def test_post_generate_slug_no_title(app):
     with app.app_context():
         post = Post(title="", content="Test Content")
-        assert post.generate_slug("") == None
+        assert post.generate_slug("") is None
 
 
 @pytest.mark.parametrize(

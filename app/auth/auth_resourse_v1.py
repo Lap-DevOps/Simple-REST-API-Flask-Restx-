@@ -1,11 +1,14 @@
 from flask import jsonify
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, create_refresh_token
+from flask_jwt_extended import (create_access_token, create_refresh_token,
+                                get_jwt_identity, jwt_required)
 from flask_restx import Namespace, Resource, abort
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 
 from app import db
-from app.auth.auth_schema import login_request_data, login_response_model, UserInputSchema, user_model, user_input_model
+from app.auth.auth_schema import (UserInputSchema, login_request_data,
+                                  login_response_model, user_input_model,
+                                  user_model)
 from app.models.user import User
 
 auth_namespace = Namespace("auth", description="Auth operations")
@@ -44,7 +47,7 @@ class UserRegister(Resource):
         except HTTPException as e:
             # Handle other exceptions (e.g., database-related errors)
             db.session.rollback()
-            abort(e.code, f"Error creating user.")
+            abort(e.code, "Error creating user.")
 
         except Exception as e:
             abort(500, massage="Internal Server Error")
@@ -53,30 +56,31 @@ class UserRegister(Resource):
 @auth_namespace.route("/login")
 class UserLogin(Resource):
     @auth_namespace.expect(login_request_data, validate=True)
-    @auth_namespace.marshal_with(login_response_model, as_list=False, code=200, mask=None)
+    @auth_namespace.marshal_with(
+        login_response_model, as_list=False, code=200, mask=None
+    )
     @auth_namespace.doc(responses={200: "Success", 404: "Invalid credentials"})
     @jwt_required(optional=True)
     def post(self):
         """Login user"""
 
-        #TODO user last login
-
         if get_jwt_identity():
-            return jsonify({'message': 'User is already logged in'}), 401
+            return jsonify({"message": "User is already logged in"}), 401
 
         data = auth_namespace.payload
 
         try:
-            user = User.query.filter_by(email=data['email']).one_or_none()
-            if not user or not user.verify_password(data['password']):
-                return {'message': 'Invalid email or password'}, 401
+            user = User.query.filter_by(email=data["email"]).one_or_none()
+            if not user or not user.verify_password(data["password"]):
+                return {"message": "Invalid email or password"}, 401
+
+            # set user login date
+            user.update_last_login()
 
             access_token = create_access_token(identity=user.public_id, fresh=True)
             refresh_token = create_refresh_token(identity=user.public_id)
-            return {'access_token': access_token, 'refresh_token': refresh_token}
+            return {"access_token": access_token, "refresh_token": refresh_token}
 
         except Exception as e:
             print(f"Error during login: {e}")
-            return jsonify({'message': 'Internal Server Error'}), 500
-
-
+            return jsonify({"message": "Internal Server Error"}), 500
