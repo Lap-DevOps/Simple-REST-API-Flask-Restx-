@@ -3,11 +3,12 @@ from flask_restx import Namespace, Resource, abort
 from werkzeug.exceptions import HTTPException
 
 from app import db
+from app.extensions import authorizations
 from app.models.like import Like
 from app.models.post import Post
 from app.schemas.like_schema import like_response_model
 
-like_namespace = Namespace("like", description="Like operations")
+like_namespace = Namespace("like", description="Like operations", authorizations=authorizations)
 
 
 @like_namespace.route("/<int:post_id>/like")
@@ -15,7 +16,7 @@ class AllPosts(Resource):
     @like_namespace.marshal_with(
         like_response_model, as_list=False, code=200, mask=None
     )
-    @like_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @like_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken")
     @jwt_required()
     def post(self, post_id):
         """Like post"""

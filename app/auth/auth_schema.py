@@ -35,6 +35,7 @@ user_model = api.model(
     },
 )
 
+
 class UserInputSchema(Schema):
     username = ma_fields.String(
         required=True,
@@ -65,6 +66,7 @@ class UserInputSchema(Schema):
         },
     )
 
+
 # Input model for creating a new user
 user_input_model = api.model(
     "Create user",
@@ -74,3 +76,5 @@ user_input_model = api.model(
         "password": fields.String(description="Password", required=True),
     },
 )
+
+

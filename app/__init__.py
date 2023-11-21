@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 
 from app.config import config
+from app.extensions import authorizations
 
 db = SQLAlchemy()
 migrate = Migrate(db)
@@ -18,6 +19,7 @@ api = Api(
     version="1.0",
     title="StarNavi API",
     description="A simple Post API",
+    authorizations=authorizations
     # doc='/swagger'
 )
 
