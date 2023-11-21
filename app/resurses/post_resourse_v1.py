@@ -1,4 +1,5 @@
 from flask import request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Namespace, Resource
 from flask_restx.errors import abort
 from marshmallow.exceptions import ValidationError
@@ -27,6 +28,7 @@ class AllPosts(Resource):
     @post_namespace.marshal_with(
         all_posts_response_model, as_list=False, code=200, mask=None
     )
+    @jwt_required()
     def get(self):
         """Get all posts"""
         # Retrieve 'limit' and 'page' from query parameters
@@ -65,6 +67,7 @@ class AllPosts(Resource):
 
     @post_namespace.expect(post_input_model, validate=True)
     @post_namespace.marshal_with(post_model, as_list=False, code=201, mask=None)
+    @jwt_required()
     def post(self):
         """Create a new post."""
         try:
@@ -73,8 +76,7 @@ class AllPosts(Resource):
             post_data = PostInputSchema().load(data)
 
             # Receive current user id
-            # current_user_id = get_jwt_identity()
-            current_user_id = "cb4e6f7c-49f4-41f5-a847-c40c9253e7d9"
+            current_user_id = get_jwt_identity()
 
             # Extract post data from the validated payload and create a new post instance
             new_post = Post(
@@ -106,6 +108,7 @@ class AllPosts(Resource):
 @post_namespace.route("/<int:post_id>")
 class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
+    @jwt_required()
     def get(self, post_id):
         """Get a specific post by ID."""
         try:
@@ -118,6 +121,7 @@ class PostResource(Resource):
 
     @post_namespace.expect(post_input_model, validate=True)
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
+    @jwt_required()
     def put(self, post_id):
         """Update a specific post by ID."""
         try:
@@ -156,6 +160,7 @@ class PostResource(Resource):
         delete_confirmation_model, as_list=False, code=200, mask=None
     )
     @post_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @jwt_required()
     def delete(self, post_id):
         """Delete a specific post by ID."""
         try:

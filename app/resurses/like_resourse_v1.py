@@ -1,3 +1,4 @@
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Namespace, Resource, abort
 from werkzeug.exceptions import HTTPException
 
@@ -15,12 +16,12 @@ class AllPosts(Resource):
         like_response_model, as_list=False, code=200, mask=None
     )
     @like_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @jwt_required()
     def post(self, post_id):
         """Like post"""
 
         # Receive current user id
-        # current_user_id = get_jwt_identity()
-        current_user_id = "cb4e6f7c-49f4-41f5-a847-c40c9253e7d9"
+        current_user_id = get_jwt_identity()
 
         try:
             like = Like(user_id=current_user_id, post_id=post_id)
@@ -39,12 +40,13 @@ class AllPosts(Resource):
         like_response_model, as_list=False, code=200, mask=None
     )
     @like_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @jwt_required()
     def delete(self, post_id):
         """Remove a like from a specific post."""
 
         # Receive current user id
-        # current_user_id = get_jwt_identity()
-        current_user_id = "cb4e6f7c-49f4-41f5-a847-c40c9253e7d9"
+        current_user_id = get_jwt_identity()
+
         try:
             post = Post.query.get_or_404(post_id)
             if post.author_id != current_user_id:

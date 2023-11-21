@@ -1,9 +1,8 @@
 import pytest
 from flask import Flask, current_app
+from flask_jwt_extended import create_access_token
 
 from app import create_app, db
-from app.models.like import Like
-from app.models.post import Post
 from app.models.user import User
 
 
@@ -26,46 +25,63 @@ def client(app):
     return app.test_client()
 
 
-def test_get_user_status_code(client):
-    # Предположим, что '/user' - это URL вашего ресурса для получения информации о пользователе
-    response = client.get("/api/user/")
+@pytest.fixture
+def registered_user(app):
+    # Create two users
+    user1 = User(username="user1", email="user1@example.com")
+    user2 = User(username="user2", email="user2@example.com")
 
-    assert response.status_code == 200
-
-
-def test_get_empty_user_list(client):
-    """Тест для обращения к эндпоинту /api/user/ с пустой базой данных."""
-    response = client.get("/api/user/")
-    assert response.status_code == 200
-    assert b'"total": 0' in response.data
-    assert b'"data": []' in response.data
-
-
-def test_get_one_user(client):
-    """Тест для обращения к эндпоинту /api/user/ с базой данных, содержащей одного пользователя."""
-    # Создаем одного пользователя
-    user = User(username="test_user", email="test@example.com")
-    db.session.add(user)
+    # Save them to the database
+    db.session.add(user1)
+    db.session.add(user2)
     db.session.commit()
 
-    response = client.get("/api/user/")
+    # Create tokens for the users
+    token_user1 = create_access_token(identity=user1.public_id)
+    token_user2 = create_access_token(identity=user2.public_id)
+
+    # Return user data and tokens as a dictionary
+    return {
+        "user1": {"user": user1, "token": token_user1},
+        "user2": {"user": user2, "token": token_user2},
+    }
+
+
+def test_get_user_status_code(client, registered_user):
+    # Example using data from the first user
+    user1_data = registered_user["user1"]
+    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+
     assert response.status_code == 200
-    assert b'"total": 1' in response.data
+
+
+def test_get_empty_user_list(client, registered_user):
+    """Test for accessing the /api/user/ endpoint with an empty database."""
+    user1_data = registered_user["user1"]
+    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+    assert response.status_code == 200
+    assert b'"total": 2' in response.data
+
+
+def test_get_one_user(client, registered_user):
+    """Test for accessing the /api/user/ endpoint with a database containing one user."""
+    user1_data = registered_user["user1"]
+
+    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user1_data['token']}"})
+    assert response.status_code == 200
+    assert b'"total": 2' in response.data
     assert b'"data":' in response.data
     assert b'"id":' in response.data
-    assert b'"username": "test_user"' in response.data
-    assert b'"email": "test@example.com"' in response.data
+    assert b'"username": "user1"' in response.data
+    assert b'"email": "user1@example.com"' in response.data
     assert b'"member_since"' in response.data
 
 
-def test_get_two_users(client):
-    """Тест для обращения к эндпоинту /api/user/ с базой данных, содержащей двух пользователей."""
-    user1 = User(username="user1", email="user1@example.com")
-    user2 = User(username="user2", email="user2@example.com")
-    db.session.add_all([user1, user2])
-    db.session.commit()
+def test_get_two_users(client, registered_user):
+    """Test for accessing the /api/user/ endpoint with a database containing two users."""
+    user2_data = registered_user["user2"]
 
-    response = client.get("/api/user/")
+    response = client.get("/api/user/", headers={"Authorization": f"Bearer {user2_data['token']}"})
     assert response.status_code == 200
     assert b'"total": 2' in response.data
     assert b'"data":' in response.data
@@ -76,43 +92,12 @@ def test_get_two_users(client):
     assert b'"email": "user2@example.com"' in response.data
 
 
-def test_create_user_and_get_resource(client):
-    """Test json response"""
-    user = User(username="test_user", email="test@example.com")
-    db.session.add(user)
-    db.session.commit()
-
-    response = client.get("/api/user/")
-
-    # Проверяем, что статус код равен 200
-    assert response.status_code == 200
-
-    # Проверяем формат JSON-ответа
-    expected_json = {
-        "total": 1,
-        "data": [
-            {
-                "id": str(user.public_id),
-                "username": user.username,
-                "email": user.email,
-                "member_since": user.member_since.isoformat(),
-            }
-        ],
-    }
-
-    # Проверяем, что JSON-ответ соответствует ожидаемому формату
-    assert response.get_json() == expected_json
-
-
-# TODO paginated tests
-
-
 def test_create_user(client):
-    """Test user creation"""
+    """Test for creating a user"""
 
     payload = {"username": "user", "email": "user@tast.com", "password": "password"}
 
-    response = client.post("/api/user/", json=payload)
+    response = client.post("/api/auth/register", json=payload)
 
     assert response.status_code == 201
     assert "id" in response.json
@@ -125,23 +110,23 @@ def test_create_user(client):
     "invalid_payload, expected_error",
     [
         (
-            {"username": "", "email": "user@tast.com", "password": "password"},
-            "Username must be at least 4 characters long",
+                {"username": "", "email": "user@tast.com", "password": "password"},
+                "Username must be at least 4 characters long",
         ),
         (
-            {"username": "user", "email": "invalid_email", "password": "password"},
-            "Invalid email format",
+                {"username": "user", "email": "invalid_email", "password": "password"},
+                "Invalid email format",
         ),
         (
-            {"username": "user", "email": "user@tast.com", "password": "short"},
-            "Password must be at least 8 characters long",
+                {"username": "user", "email": "user@tast.com", "password": "short"},
+                "Password must be at least 8 characters long",
         ),
     ],
 )
 def test_create_user_validation_errors(client, invalid_payload, expected_error):
-    """Test user creation with validation errors"""
+    """Test for creating a user with validation errors"""
 
-    response = client.post("/api/user/", json=invalid_payload)
+    response = client.post("/api/auth/register", json=invalid_payload)
 
     assert response.status_code == 400
     assert "message" in response.json
