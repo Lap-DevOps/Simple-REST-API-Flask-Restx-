@@ -53,10 +53,13 @@ def create_app() -> Flask:
     from app.resurses.post_resourse_v1 import post_namespace
     from app.resurses.like_resourse_v1 import like_namespace
     from app.auth.auth_resourse_v1 import auth_namespace
+    from app.resurses.analitics_resourse_v1 import analytics_namespace
 
     api.add_namespace(auth_namespace, path="/api/auth")
     api.add_namespace(user_namespace, path="/api/user")
     api.add_namespace(post_namespace, path="/api/post")
     api.add_namespace(like_namespace, path="/api/post")
+    api.add_namespace(analytics_namespace, path='/api/analytics')
+
 
     return app
