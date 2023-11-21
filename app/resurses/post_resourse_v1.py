@@ -8,10 +8,14 @@ from werkzeug.exceptions import HTTPException
 
 from app import db
 from app.models.post import Post
-from app.schemas.post_schema import (PostInputSchema, SimplPostSchema,
-                                     all_posts_response_model,
-                                     delete_confirmation_model,
-                                     post_input_model, post_model)
+from app.schemas.post_schema import (
+    PostInputSchema,
+    SimplPostSchema,
+    all_posts_response_model,
+    delete_confirmation_model,
+    post_input_model,
+    post_model,
+)
 
 post_namespace = Namespace("post", description="Post operations")
 

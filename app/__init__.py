@@ -43,7 +43,7 @@ def create_app() -> Flask:
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    from app.models import like, post, user
+    from app.models import like, post, user  # pragma: no cover
 
     db.init_app(app)
     migrate.init_app(app, db)
