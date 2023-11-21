@@ -1,7 +1,6 @@
 from flask_restx import fields
 from marshmallow import Schema
 from marshmallow import fields as ma_fields
-from marshmallow import validate
 
 from app import api
 

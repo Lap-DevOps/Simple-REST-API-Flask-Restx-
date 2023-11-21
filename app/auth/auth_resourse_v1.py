@@ -47,7 +47,7 @@ class UserRegister(Resource):
         except HTTPException as e:
             # Handle other exceptions (e.g., database-related errors)
             db.session.rollback()
-            abort(e.code, f"Error creating user.")
+            abort(e.code, "Error creating user.")
 
         except Exception as e:
             abort(500, massage="Internal Server Error")
