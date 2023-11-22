@@ -21,8 +21,8 @@ api = Api(
     version="1.0",
     title="StarNavi API",
     description="A simple Post API",
-    authorizations=authorizations
-    # doc='/swagger'
+    authorizations=authorizations,
+    doc='/swagger'
 )
 
 
