@@ -13,7 +13,7 @@ if os.path.exists(dotenv_path):
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious_secret_key")
     SECURITY_PASSWORD_SALT = (
-        os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
+            os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
     )
     SECURITY_PASSWORD_HASH = "sha512_crypt"
     DEBUG = False

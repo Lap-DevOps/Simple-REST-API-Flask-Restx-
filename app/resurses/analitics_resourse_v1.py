@@ -23,7 +23,7 @@ class LikeAnalytic(Resource):
         like_stats_response_model, as_list=False, code=200, mask=None
     )
     @analytics_namespace.doc(
-        responses={200: "Success", 500: "Internal Server Error"},
+        responses={200: "Success", 400: "Internal Server Error"},
         security="jsonWebToken",
     )
     @analytics_namespace.doc(
@@ -77,7 +77,7 @@ class LikeAnalytic(Resource):
             abort(404, f"Internal Server Error. {str(e)}")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")
 
 
 @analytics_namespace.route("/user/<user_id>")
@@ -103,10 +103,10 @@ class UserAnalytic(Resource):
         # Prepare the response with user analytics data
         response = {
             "id": user.public_id,
-            "last_login": user.last_login.strftime("%Y-%m-%d %H:%M:%S")
+            "last login": user.last_login
             if user.last_login
             else None,
-            "last_api_request": user.last_api_request.strftime("%Y-%m-%d %H:%M:%S")
+            "last api request": user.last_api_request
             if user.last_api_request
             else None,
         }

@@ -98,7 +98,7 @@ class AllPosts(Resource):
             abort(e.code, f"Error creating Post.")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")
 
 
 @post_namespace.route("/<int:post_id>")
@@ -150,7 +150,7 @@ class PostResource(Resource):
             abort(e.code, f"Error updating Post.")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")
 
     @post_namespace.marshal_with(
         delete_confirmation_model, as_list=False, code=200, mask=None
@@ -174,4 +174,4 @@ class PostResource(Resource):
             abort(e.code, f"Error deleting Post:")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")

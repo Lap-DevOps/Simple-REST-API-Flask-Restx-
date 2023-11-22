@@ -52,4 +52,4 @@ class AllUsers(Resource):
             abort(e.code, f"Error receiving users.")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")

@@ -39,7 +39,7 @@ class AllPosts(Resource):
             abort(e.code, f"Error liking Post:")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")
 
     @like_namespace.marshal_with(
         like_response_model, as_list=False, code=200, mask=None
@@ -72,4 +72,4 @@ class AllPosts(Resource):
             abort(e.code, f"Internal Server Error. {str(e)}")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")

@@ -26,6 +26,8 @@ api = Api(
 )
 
 
+
+
 def create_app() -> Flask:
     """
     Creates an application instance to run
@@ -63,5 +65,9 @@ def create_app() -> Flask:
     api.add_namespace(post_namespace, path="/api/post")
     api.add_namespace(like_namespace, path="/api/post")
     api.add_namespace(analytics_namespace, path="/api/analytics")
+
+
+    # from app.auth.helper import get_jwt_identity
+    from app.auth.helper import  user_lookup_callback
 
     return app

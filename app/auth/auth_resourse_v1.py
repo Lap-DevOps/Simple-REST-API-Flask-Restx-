@@ -50,7 +50,7 @@ class UserRegister(Resource):
             abort(e.code, "Error creating user.")
 
         except Exception as e:
-            abort(500, massage="Internal Server Error")
+            abort(400, massage="Internal Server Error")
 
 
 @auth_namespace.route("/login")
@@ -75,7 +75,9 @@ class UserLogin(Resource):
                 return {"message": "Invalid email or password"}, 401
 
             # set user login date
-            user.update_last_login()
+            if user:
+                user.update_last_login()
+                db.session.commit()
 
             access_token = create_access_token(identity=user.public_id, fresh=True)
             refresh_token = create_refresh_token(identity=user.public_id)

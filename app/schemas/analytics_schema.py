@@ -7,12 +7,11 @@ user_activity_model = api.model(
     {
         "id": fields.String(description="User ID"),
         "last login": fields.DateTime(description="Last login", dt_format="iso8601"),
-        "last api_request": fields.DateTime(
+        "last api request": fields.DateTime(
             description="Last API request", dt_format="iso8601"
         ),
     },
 )
-
 
 like_stats_model = api.model(
     "Like Statistics",
