@@ -15,7 +15,10 @@ user_namespace = Namespace("user", description="User operations")
 @user_namespace.route("/")
 class AllUsers(Resource):
     # Document the expected query parameters for the 'get' operation
-    @user_namespace.doc(params={"limit": "Limit for pagination", "page": "Page number"},security="jsonWebToken",)
+    @user_namespace.doc(
+        params={"limit": "Limit for pagination", "page": "Page number"},
+        security="jsonWebToken",
+    )
     # Specify the response model and status code for the 'get' operation
     @user_namespace.marshal_with(
         all_users_response_model, as_list=False, code=200, mask=None

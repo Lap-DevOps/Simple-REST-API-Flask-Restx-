@@ -13,7 +13,7 @@ if os.path.exists(dotenv_path):
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious_secret_key")
     SECURITY_PASSWORD_SALT = (
-            os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
+        os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
     )
     SECURITY_PASSWORD_HASH = "sha512_crypt"
     DEBUG = False
@@ -35,7 +35,7 @@ class DevelopmentConfig(Config):
         f"postgresql+psycopg2://{os.environ.get('DEV_DATABASE_USER')}:"
         f"{os.environ.get('DEV_DATABASE_PASSWORD')}@{os.environ.get('DEV_DATABASE_HOST')}:"
         f"{os.environ.get('DEV_DATABASE_PORT')}/{os.environ.get('DEV_DATABASE_NAME')}"
-    )
+    ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
@@ -47,7 +47,7 @@ class TestingConfig(Config):
     RESTX_MASK_SWAGGER = True
 
     SQLALCHEMY_DATABASE_URI = (
-            os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
+        os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
     )
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False

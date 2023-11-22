@@ -1,29 +1,30 @@
 import requests
 
+
 class API_Client:
     def __init__(self, base_url):
         self.base_url = base_url
         self.jwt_token = None
 
     def _get_headers(self):
-        headers = {'Content-Type': 'application/json'}
+        headers = {"Content-Type": "application/json"}
         if self.jwt_token:
-            headers['Authorization'] = f'Bearer {self.jwt_token}'
+            headers["Authorization"] = f"Bearer {self.jwt_token}"
         return headers
 
     def _login(self, user):
-        login_url = f'{self.base_url}/auth/login'
-        credentials = {'email': user["email"], 'password': user["password"]}
+        login_url = f"{self.base_url}/auth/login"
+        credentials = {"email": user["email"], "password": user["password"]}
         try:
             response = requests.post(login_url, json=credentials)
             response.raise_for_status()  # Check the response status
-            self.jwt_token = response.json().get('access_token')
+            self.jwt_token = response.json().get("access_token")
             return self.jwt_token
         except requests.exceptions.RequestException as e:
             return None
 
     def post(self, endpoint, payload=None, user=None):
-        url = f'{self.base_url}/{endpoint}'
+        url = f"{self.base_url}/{endpoint}"
         headers = self._get_headers()
         response = None
 
@@ -48,7 +49,7 @@ class API_Client:
             return response
 
     def get(self, endpoint, payload=None, user=None):
-        url = f'{self.base_url}/{endpoint}'
+        url = f"{self.base_url}/{endpoint}"
         headers = self._get_headers()
         response = None
 
