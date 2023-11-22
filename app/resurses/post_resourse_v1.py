@@ -25,7 +25,7 @@ class AllPosts(Resource):
     # Document the expected query parameters for the 'get' operation
     @post_namespace.doc(
         params={"limit": "Limit for pagination", "page": "Page number"},
-        security="jsonWebToken",
+        security="jsonWebToken", description="Endpoint to retrieve all posts with optional pagination."
     )
     # Specify the response model and status code for the 'get' operation
     @post_namespace.marshal_with(
@@ -72,7 +72,7 @@ class AllPosts(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=201, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken",
+        security="jsonWebToken",  description="Endpoint to create a new post.",
     )
     @jwt_required()
     def post(self):
@@ -117,7 +117,7 @@ class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken",
+        security="jsonWebToken", description="Get details of a specific post by ID."
     )
     @jwt_required()
     def get(self, post_id):
@@ -134,7 +134,7 @@ class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken",
+        security="jsonWebToken", description="Update a specific post by ID.",
     )
     @jwt_required()
     def put(self, post_id):
@@ -176,7 +176,7 @@ class PostResource(Resource):
     )
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken",
+        security="jsonWebToken", description="Delete a specific post by ID."
     )
     @jwt_required()
     def delete(self, post_id):

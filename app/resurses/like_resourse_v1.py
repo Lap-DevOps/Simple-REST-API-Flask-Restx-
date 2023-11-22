@@ -19,7 +19,8 @@ class AllPosts(Resource):
         like_response_model, as_list=False, code=200, mask=None
     )
     @like_namespace.doc(
-        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken"
+        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken",
+        description="Endpoint to like a post."
     )
     @jwt_required()
     def post(self, post_id):
@@ -45,7 +46,8 @@ class AllPosts(Resource):
         like_response_model, as_list=False, code=200, mask=None
     )
     @like_namespace.doc(
-        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken"
+        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken",
+        description="Endpoint to unlike a post."
     )
     @jwt_required()
     def delete(self, post_id):

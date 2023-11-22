@@ -26,7 +26,8 @@ auth_namespace = Namespace("auth", description="Auth operations")
 class UserRegister(Resource):
     @auth_namespace.expect(user_input_model, validate=True)
     @auth_namespace.marshal_with(user_model, as_list=False, code=201, mask=None)
-    @auth_namespace.doc(responses={201: "Success", 404: "Invalid credentials"})
+    @auth_namespace.doc(responses={201: "Success", 404: "Invalid credentials"},
+                        description="Endpoint to register a new user.")
     def post(self):
         """Register user"""
         try:
@@ -67,7 +68,8 @@ class UserLogin(Resource):
     @auth_namespace.marshal_with(
         login_response_model, as_list=False, code=200, mask=None
     )
-    @auth_namespace.doc(responses={200: "Success", 404: "Invalid credentials"})
+    @auth_namespace.doc(responses={200: "Success", 404: "Invalid credentials"},
+                        description="Endpoint to login a user.")
     @jwt_required(optional=True)
     def post(self):
         """Login user"""
