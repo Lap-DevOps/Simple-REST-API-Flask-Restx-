@@ -1,6 +1,8 @@
 import random
+
 import requests
 from faker import Faker
+
 from SocialMediaGeneratorBot.client import API_Client
 from SocialMediaGeneratorBot.settings import Settings
 
@@ -38,7 +40,7 @@ class StarNaviClient:
     def create_posts(self):
         request_endpoint = "post"
         for user in self.users:
-            for index in range(self.config.max_post_per_user):
+            for index in range(random.randint(1, self.config.max_post_per_user + 1)):
                 post_data = {"title": self.fake.sentence(), "content": self.fake.text()}
 
                 try:
@@ -72,7 +74,7 @@ class StarNaviClient:
                     )
                     response.raise_for_status()  # Check the response status
                     print(
-                        f"Post id:{random_post} liked successfully. Response status code: {response.status_code}"
+                        f"Post id:{random_post} liked successfully by {user['username']} . Response status code: {response.status_code}"
                     )
                 except requests.exceptions.RequestException as e:
                     print(f"Failed to like post. Error: {e}")

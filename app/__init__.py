@@ -44,6 +44,7 @@ def create_app() -> Flask:
     config[config_name].init_app(app)
     print("API configuration:", app.config["ENV"])
 
+
     from app.models import like, post, user  # pragma: no cover
 
     db.init_app(app)

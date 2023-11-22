@@ -31,11 +31,8 @@ class DevelopmentConfig(Config):
     ENV = "development"
     DEBUG = True
 
-    SQLALCHEMY_DATABASE_URI = (
-        f"postgresql+psycopg2://{os.environ.get('DEV_DATABASE_USER')}:"
-        f"{os.environ.get('DEV_DATABASE_PASSWORD')}@{os.environ.get('DEV_DATABASE_HOST')}:"
-        f"{os.environ.get('DEV_DATABASE_PORT')}/{os.environ.get('DEV_DATABASE_NAME')}"
-    ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+                              'sqlite:///' + os.path.join(parent_dir, 'data-dev.sqlite')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
