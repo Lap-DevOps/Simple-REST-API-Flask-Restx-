@@ -15,9 +15,10 @@ class Like(db.Model):
         db.Integer,
         db.ForeignKey("posts.id", ondelete="CASCADE"),
         nullable=False,
-        unique=True,
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    __table_args__ = (db.UniqueConstraint('user_id', 'post_id'),)
 
     def __repr__(self):
         return f'<Like: user_id={self.user_id}, post_id={self.post_id}, created_at={self.created_at.strftime("%d.%m.%Y-%H.%M")}>'

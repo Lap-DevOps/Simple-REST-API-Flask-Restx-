@@ -42,8 +42,8 @@ class LikeAnalytic(Resource):
             date_to = request.args.get("date_to")
 
             # Convert strings to date objects
-            date_from = datetime.strptime(date_from, "%Y-%m-%d")
-            date_to = datetime.strptime(date_to, "%Y-%m-%d")
+            date_from = datetime.strptime(date_from, "%Y-%m-%d") if date_from else datetime(1900, 1, 1)
+            date_to = datetime.strptime(date_to, "%Y-%m-%d") if date_to else datetime.now()
 
             # Execute a database query with daily aggregation
             result = (

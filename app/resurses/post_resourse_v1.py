@@ -19,7 +19,7 @@ post_namespace = Namespace("post", description="Post operations")
 @post_namespace.route("/")
 class AllPosts(Resource):
     # Document the expected query parameters for the 'get' operation
-    @post_namespace.doc(params={"limit": "Limit for pagination", "page": "Page number"})
+    @post_namespace.doc(params={"limit": "Limit for pagination", "page": "Page number"}, security="jsonWebToken", )
     # Specify the response model and status code for the 'get' operation
     @post_namespace.marshal_with(
         all_posts_response_model, as_list=False, code=200, mask=None
@@ -63,6 +63,7 @@ class AllPosts(Resource):
 
     @post_namespace.expect(post_input_model, validate=True)
     @post_namespace.marshal_with(post_model, as_list=False, code=201, mask=None)
+    @post_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken", )
     @jwt_required()
     def post(self):
         """Create a new post."""
@@ -104,6 +105,7 @@ class AllPosts(Resource):
 @post_namespace.route("/<int:post_id>")
 class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
+    @post_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken", )
     @jwt_required()
     def get(self, post_id):
         """Get a specific post by ID."""
@@ -117,6 +119,7 @@ class PostResource(Resource):
 
     @post_namespace.expect(post_input_model, validate=True)
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
+    @post_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken", )
     @jwt_required()
     def put(self, post_id):
         """Update a specific post by ID."""
@@ -155,7 +158,7 @@ class PostResource(Resource):
     @post_namespace.marshal_with(
         delete_confirmation_model, as_list=False, code=200, mask=None
     )
-    @post_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @post_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken", )
     @jwt_required()
     def delete(self, post_id):
         """Delete a specific post by ID."""

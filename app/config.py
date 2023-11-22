@@ -20,7 +20,7 @@ class Config:
     JWT_SECRET_KEY = "very_hard_key"
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
-    CORS_ORIGINS = ["http://localhost:5005", "https:127.0.0.1:5005"]
+    CORS_ORIGINS = ["http://localhost:5000", "http:127.0.0.1:5000", "http:0.0.0.0"]
 
     @staticmethod
     def init_app(app):
@@ -47,7 +47,7 @@ class TestingConfig(Config):
     RESTX_MASK_SWAGGER = True
 
     SQLALCHEMY_DATABASE_URI = (
-        os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
+            os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
     )
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False

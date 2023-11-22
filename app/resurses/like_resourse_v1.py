@@ -44,7 +44,7 @@ class AllPosts(Resource):
     @like_namespace.marshal_with(
         like_response_model, as_list=False, code=200, mask=None
     )
-    @like_namespace.doc(responses={200: "Success", 404: "Post not found"})
+    @like_namespace.doc(responses={200: "Success", 404: "Post not found"}, security="jsonWebToken")
     @jwt_required()
     def delete(self, post_id):
         """Remove a like from a specific post."""
