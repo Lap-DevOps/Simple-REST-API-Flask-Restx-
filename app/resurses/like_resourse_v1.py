@@ -1,3 +1,4 @@
+
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Namespace, Resource, abort
 from werkzeug.exceptions import HTTPException
@@ -29,6 +30,18 @@ class AllPosts(Resource):
         try:
             # Receive current user id
             current_user_id = get_jwt_identity()
+
+            # Check if the current user is the author of the post
+            post_author_id = Post.query.filter_by(id=post_id).first().author_id
+
+            if current_user_id != post_author_id:
+                # If the current user is not the author, proceed with creating the like
+                like = Like(user_id=current_user_id, post_id=post_id)
+                # Rest of your code for handling the like creation...
+            else:
+                # Handle the case where the user is trying to like their own post
+                return {"message": "You cannot like your own post."}, 400
+
             like = Like(user_id=current_user_id, post_id=post_id)
             db.session.add(like)
             db.session.commit()
