@@ -1,4 +1,3 @@
-
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Namespace, Resource, abort
 from werkzeug.exceptions import HTTPException
@@ -9,19 +8,16 @@ from app.models.like import Like
 from app.models.post import Post
 from app.schemas.like_schema import like_response_model
 
-like_namespace = Namespace(
-    "like", description="Like operations", authorizations=authorizations
-)
+like_namespace = Namespace("like", description="Like operations", authorizations=authorizations)
 
 
 @like_namespace.route("/<int:post_id>/like")
 class AllPosts(Resource):
-    @like_namespace.marshal_with(
-        like_response_model, as_list=False, code=200, mask=None
-    )
+    @like_namespace.marshal_with(like_response_model, as_list=False, code=200, mask=None)
     @like_namespace.doc(
-        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken",
-        description="Endpoint to like a post."
+        responses={200: "Success", 404: "Post not found"},
+        security="jsonWebToken",
+        description="Endpoint to like a post.",
     )
     @jwt_required()
     def post(self, post_id):
@@ -54,12 +50,11 @@ class AllPosts(Resource):
         except Exception as e:
             abort(400, massage="Internal Server Error")
 
-    @like_namespace.marshal_with(
-        like_response_model, as_list=False, code=200, mask=None
-    )
+    @like_namespace.marshal_with(like_response_model, as_list=False, code=200, mask=None)
     @like_namespace.doc(
-        responses={200: "Success", 404: "Post not found"}, security="jsonWebToken",
-        description="Endpoint to unlike a post."
+        responses={200: "Success", 404: "Post not found"},
+        security="jsonWebToken",
+        description="Endpoint to unlike a post.",
     )
     @jwt_required()
     def delete(self, post_id):
@@ -72,17 +67,13 @@ class AllPosts(Resource):
             post = Post.query.get_or_404(post_id)
             if post.author_id != current_user_id:
                 abort(403, message=f"Unauthorized: User is not the author of the post")
-            like = Like.query.filter_by(
-                user_id=current_user_id, post_id=post.id
-            ).first()
+            like = Like.query.filter_by(user_id=current_user_id, post_id=post.id).first()
             if like is None:
                 return {"message": "User has not liked this post"}, 404
 
             db.session.delete(like)
             db.session.commit()
-            return {
-                "message": f"Post with ID {post_id} was unliked by user {current_user_id}"
-            }, 200
+            return {"message": f"Post with ID {post_id} was unliked by user {current_user_id}"}, 200
 
         except HTTPException as e:
             abort(e.code, f"Internal Server Error. {str(e)}")

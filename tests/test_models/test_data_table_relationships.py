@@ -28,9 +28,7 @@ def test_sqlalchemy_database_uri(app):
 def test_like_relationships(app):
     with app.app_context():
         # Создаем тестового пользователя
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -56,9 +54,7 @@ def test_like_relationships(app):
 def test_user_post_like_relationships(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -97,9 +93,7 @@ def test_user_post_like_relationships(app):
 def test_user_multiple_posts(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -107,12 +101,8 @@ def test_user_multiple_posts(app):
         assert len(user.posts) == 0
 
         # Create two posts for the user
-        post1 = Post(
-            title="Test Post 1", content="This is the first test post", author=user
-        )
-        post2 = Post(
-            title="Test Post 2", content="This is the second test post", author=user
-        )
+        post1 = Post(title="Test Post 1", content="This is the first test post", author=user)
+        post2 = Post(title="Test Post 2", content="This is the second test post", author=user)
         db.session.add_all([post1, post2])
         db.session.commit()
 
@@ -132,9 +122,7 @@ def test_user_multiple_posts(app):
 def test_user_has_multiple_posts_and_likes(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -143,12 +131,8 @@ def test_user_has_multiple_posts_and_likes(app):
         assert len(user.likes) == 0
 
         # Create two posts for the user
-        post1 = Post(
-            title="Test Post 1", content="This is the first test post", author=user
-        )
-        post2 = Post(
-            title="Test Post 2", content="This is the second test post", author=user
-        )
+        post1 = Post(title="Test Post 1", content="This is the first test post", author=user)
+        post2 = Post(title="Test Post 2", content="This is the second test post", author=user)
         db.session.add_all([post1, post2])
         db.session.commit()
 
@@ -194,9 +178,7 @@ def test_user_has_multiple_posts_and_likes(app):
 def test_post_backref_to_user(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -215,9 +197,7 @@ def test_post_backref_to_user(app):
 def test_like_backref(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -243,9 +223,7 @@ def test_like_backref(app):
 def test_delete_user_and_related_post(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -272,9 +250,7 @@ def test_delete_user_and_related_post(app):
 def test_delete_post_and_related_like(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -307,9 +283,7 @@ def test_delete_post_and_related_like(app):
 def test_delete_user_and_related_post_and_like(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -343,9 +317,7 @@ def test_delete_user_and_related_post_and_like(app):
 def test_user_cannot_like_post_twice(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 

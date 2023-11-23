@@ -29,9 +29,7 @@ def test_sqlalchemy_database_uri(app):
 def test_post_model_basic(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -77,9 +75,7 @@ def test_post_generate_slug_no_title(app):
 )
 def test_post_generate_slug(app, title, expected_slug):
     with app.app_context():
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -93,9 +89,7 @@ def test_post_generate_slug(app, title, expected_slug):
 def test_post_repr(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -115,9 +109,7 @@ def test_post_repr(app):
 def test_slug_change(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 

@@ -22,9 +22,7 @@ class User(db.Model):
     last_login = db.Column(db.DateTime(), nullable=True)
     last_api_request = db.Column(db.DateTime(), nullable=True)
 
-    posts = db.relationship(
-        "Post", backref="author", lazy=True, cascade="all, delete-orphan"
-    )
+    posts = db.relationship("Post", backref="author", lazy=True, cascade="all, delete-orphan")
     likes = db.relationship("Like", backref="author", lazy=True)
 
     def update_last_login(self):

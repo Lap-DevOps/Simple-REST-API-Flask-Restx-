@@ -25,12 +25,11 @@ class AllPosts(Resource):
     # Document the expected query parameters for the 'get' operation
     @post_namespace.doc(
         params={"limit": "Limit for pagination", "page": "Page number"},
-        security="jsonWebToken", description="Endpoint to retrieve all posts with optional pagination."
+        security="jsonWebToken",
+        description="Endpoint to retrieve all posts with optional pagination.",
     )
     # Specify the response model and status code for the 'get' operation
-    @post_namespace.marshal_with(
-        all_posts_response_model, as_list=False, code=200, mask=None
-    )
+    @post_namespace.marshal_with(all_posts_response_model, as_list=False, code=200, mask=None)
     @jwt_required()
     def get(self):
         """Get all posts"""
@@ -46,9 +45,7 @@ class AllPosts(Resource):
 
             else:
                 # Otherwise, use pagination
-                paginated_posts = Post.query.order_by(desc(Post.date_posted)).paginate(
-                    page=page, per_page=limit
-                )
+                paginated_posts = Post.query.order_by(desc(Post.date_posted)).paginate(page=page, per_page=limit)
                 posts = paginated_posts.items
 
             # Serialize post data using SimplPostSchema
@@ -72,7 +69,8 @@ class AllPosts(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=201, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken",  description="Endpoint to create a new post.",
+        security="jsonWebToken",
+        description="Endpoint to create a new post.",
     )
     @jwt_required()
     def post(self):
@@ -117,15 +115,14 @@ class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken", description="Get details of a specific post by ID."
+        security="jsonWebToken",
+        description="Get details of a specific post by ID.",
     )
     @jwt_required()
     def get(self, post_id):
         """Get a specific post by ID."""
         try:
-            post = Post.query.get_or_404(
-                post_id, description=f"Post with ID {post_id} not found"
-            )
+            post = Post.query.get_or_404(post_id, description=f"Post with ID {post_id} not found")
             return post, 200
         except Exception as e:
             abort(e.code, e)
@@ -134,7 +131,8 @@ class PostResource(Resource):
     @post_namespace.marshal_with(post_model, as_list=False, code=200, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken", description="Update a specific post by ID.",
+        security="jsonWebToken",
+        description="Update a specific post by ID.",
     )
     @jwt_required()
     def put(self, post_id):
@@ -145,9 +143,7 @@ class PostResource(Resource):
             post_data = PostInputSchema().load(data)
 
             # Retrieve the post by ID or return a 404 error if not found
-            post = Post.query.get_or_404(
-                post_id, description=f"Post with ID {post_id} not found"
-            )
+            post = Post.query.get_or_404(post_id, description=f"Post with ID {post_id} not found")
 
             # Update post data
             post.title = post_data.get("title", post.title)
@@ -171,12 +167,11 @@ class PostResource(Resource):
         except Exception as e:
             abort(400, massage="Internal Server Error")
 
-    @post_namespace.marshal_with(
-        delete_confirmation_model, as_list=False, code=200, mask=None
-    )
+    @post_namespace.marshal_with(delete_confirmation_model, as_list=False, code=200, mask=None)
     @post_namespace.doc(
         responses={200: "Success", 404: "Post not found"},
-        security="jsonWebToken", description="Delete a specific post by ID."
+        security="jsonWebToken",
+        description="Delete a specific post by ID.",
     )
     @jwt_required()
     def delete(self, post_id):

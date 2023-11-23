@@ -20,9 +20,7 @@ simpl_user_model = api.model(
 all_users_response_model = api.model(
     "All Users",
     {
-        "total": fields.Integer(
-            description="Total number of users", required=True, readonly=True
-        ),
+        "total": fields.Integer(description="Total number of users", required=True, readonly=True),
         "data": fields.List(
             fields.Nested(simpl_user_model),
             description="List of users",

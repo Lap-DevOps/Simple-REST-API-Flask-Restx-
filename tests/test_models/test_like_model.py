@@ -29,9 +29,7 @@ def test_sqlalchemy_database_uri(app):
 def test_like_model_basic(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -60,9 +58,7 @@ def test_like_model_basic(app):
 def test_like_repr(app):
     with app.app_context():
         # Create test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 

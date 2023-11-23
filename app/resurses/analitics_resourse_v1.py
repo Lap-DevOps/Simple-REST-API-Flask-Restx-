@@ -11,16 +11,12 @@ from app.models.like import Like
 from app.models.user import User
 from app.schemas.analytics_schema import like_stats_response_model, user_activity_model
 
-analytics_namespace = Namespace(
-    "analytics", description="Analytics", authorizations=authorizations
-)
+analytics_namespace = Namespace("analytics", description="Analytics", authorizations=authorizations)
 
 
 @analytics_namespace.route("/")
 class LikeAnalytic(Resource):
-    @analytics_namespace.marshal_with(
-        like_stats_response_model, as_list=False, code=200, mask=None
-    )
+    @analytics_namespace.marshal_with(like_stats_response_model, as_list=False, code=200, mask=None)
     @analytics_namespace.doc(
         responses={200: "Success", 400: "Internal Server Error"},
         security="jsonWebToken",
@@ -41,14 +37,8 @@ class LikeAnalytic(Resource):
             date_to = request.args.get("date_to")
 
             # Convert strings to date objects
-            date_from = (
-                datetime.strptime(date_from, "%Y-%m-%d")
-                if date_from
-                else datetime(1900, 1, 1)
-            )
-            date_to = (
-                datetime.strptime(date_to, "%Y-%m-%d") if date_to else datetime.now()
-            )
+            date_from = datetime.strptime(date_from, "%Y-%m-%d") if date_from else datetime(1900, 1, 1)
+            date_to = datetime.strptime(date_to, "%Y-%m-%d") if date_to else datetime.now()
 
             # Execute a database query with daily aggregation
             result = (
@@ -61,10 +51,7 @@ class LikeAnalytic(Resource):
                 .all()
             )
 
-            analytics_data = [
-                {"date": str(row.date), "like_count": row.like_count}
-                for row in result
-            ]
+            analytics_data = [{"date": str(row.date), "like_count": row.like_count} for row in result]
 
             # Calculate the total number of likes
             total_likes = sum(entry["like_count"] for entry in analytics_data)
@@ -86,9 +73,7 @@ class LikeAnalytic(Resource):
 
 @analytics_namespace.route("/user/<user_id>")
 class UserAnalytic(Resource):
-    @analytics_namespace.marshal_with(
-        user_activity_model, as_list=False, code=200, mask=None
-    )
+    @analytics_namespace.marshal_with(user_activity_model, as_list=False, code=200, mask=None)
     @analytics_namespace.doc(
         responses={200: "Success", 404: "User not found"},
         security="jsonWebToken",
@@ -108,9 +93,7 @@ class UserAnalytic(Resource):
         response = {
             "id": user.public_id,
             "last login": user.last_login if user.last_login else None,
-            "last api request": user.last_api_request
-            if user.last_api_request
-            else None,
+            "last api request": user.last_api_request if user.last_api_request else None,
         }
 
         return response, 200

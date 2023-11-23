@@ -22,7 +22,7 @@ api = Api(
     title="StarNavi API",
     description="A simple Post API",
     authorizations=authorizations,
-    doc='/swagger'
+    doc="/swagger",
 )
 
 
@@ -44,7 +44,6 @@ def create_app() -> Flask:
     config[config_name].init_app(app)
     print("API configuration:", app.config["ENV"])
 
-
     from app.models import like, post, user  # pragma: no cover
 
     db.init_app(app)
@@ -65,7 +64,6 @@ def create_app() -> Flask:
     api.add_namespace(post_namespace, path="/api/post")
     api.add_namespace(like_namespace, path="/api/post")
     api.add_namespace(analytics_namespace, path="/api/analytics")
-
 
     from app.auth.helper import user_lookup_callback
 

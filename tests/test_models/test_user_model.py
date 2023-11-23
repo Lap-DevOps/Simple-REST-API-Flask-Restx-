@@ -31,9 +31,7 @@ def test_sqlalchemy_database_uri(app):
 def test_user_model_basic(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -53,9 +51,7 @@ def test_user_model_basic(app):
 def test_user_password_property(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -64,25 +60,19 @@ def test_user_password_property(app):
         except AttributeError as e:
             assert str(e) == "password is not a readable attribute"
         else:
-            assert (
-                False
-            ), "Accessing the 'password' property did not raise the expected AttributeError"
+            assert False, "Accessing the 'password' property did not raise the expected AttributeError"
 
 
 def test_public_id(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
         retrieved_user = User.query.filter_by(username="testuser").first()
 
-        assert hasattr(
-            retrieved_user, "public_id"
-        ), "Model does not have 'public_id' attribute"
+        assert hasattr(retrieved_user, "public_id"), "Model does not have 'public_id' attribute"
 
         # Check if 'public_id' is a string in UUID format
         try:
@@ -90,17 +80,13 @@ def test_public_id(app):
         except ValueError:
             assert False, "'public_id' is not a valid UUID"
         else:
-            assert (
-                str(uuid_obj) == retrieved_user.public_id
-            ), "'public_id' is not a valid UUID string"
+            assert str(uuid_obj) == retrieved_user.public_id, "'public_id' is not a valid UUID string"
 
 
 def test_user_verify_password(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -112,9 +98,7 @@ def test_user_verify_password(app):
 def test_user_repr(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -126,9 +110,7 @@ def test_user_repr(app):
 def test_update_last_login(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -156,9 +138,7 @@ def test_update_last_login(app):
 def test_update_last_api_request(app):
     with app.app_context():
         # Create a test user
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
@@ -186,16 +166,12 @@ def test_update_last_api_request(app):
 def test_add_two_user(app):
     with app.app_context():
         # Create a test user1
-        user = User(
-            username="testuser", email="test@example.com", password="testpassword"
-        )
+        user = User(username="testuser", email="test@example.com", password="testpassword")
         db.session.add(user)
         db.session.commit()
 
         # Create a test user2
-        user2 = User(
-            username="testuser2", email="test2@example.com", password="testpassword"
-        )
+        user2 = User(username="testuser2", email="test2@example.com", password="testpassword")
         db.session.add(user2)
         db.session.commit()
 

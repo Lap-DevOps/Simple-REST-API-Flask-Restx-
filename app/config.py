@@ -12,9 +12,7 @@ if os.path.exists(dotenv_path):
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious_secret_key")
-    SECURITY_PASSWORD_SALT = (
-        os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
-    )
+    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT") or "hard to guess string"
     SECURITY_PASSWORD_HASH = "sha512_crypt"
     DEBUG = False
     JWT_SECRET_KEY = "very_hard_key"
@@ -31,8 +29,7 @@ class DevelopmentConfig(Config):
     ENV = "development"
     DEBUG = True
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(parent_dir, 'data-dev.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DEV_DATABASE_URL") or "sqlite:///" + os.path.join(parent_dir, "data-dev.sqlite")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
 
@@ -43,9 +40,7 @@ class TestingConfig(Config):
     TESTING = True
     RESTX_MASK_SWAGGER = True
 
-    SQLALCHEMY_DATABASE_URI = (
-        os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URL") or "sqlite:///:memory:"
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

@@ -31,9 +31,7 @@ user_model = api.model(
         "email": fields.String(description="Email", required=True),
         "member_since": fields.DateTime(description="Member Since", required=True),
         "last_login": fields.DateTime(description="Last_login", required=False),
-        "last_api_request": fields.DateTime(
-            description="Last_api_request", required=False
-        ),
+        "last_api_request": fields.DateTime(description="Last_api_request", required=False),
     },
 )
 
@@ -41,9 +39,7 @@ user_model = api.model(
 class UserInputSchema(Schema):
     username = ma_fields.String(
         required=True,
-        validate=validate.Length(
-            min=4, error="Username must be at least 4 characters long"
-        ),
+        validate=validate.Length(min=4, error="Username must be at least 4 characters long"),
         error_messages={
             "required": "Username is required",
             "null": "Username cannot be empty",
@@ -59,9 +55,7 @@ class UserInputSchema(Schema):
     )
     password = ma_fields.String(
         required=True,
-        validate=validate.Length(
-            min=8, error="Password must be at least 8 characters long"
-        ),
+        validate=validate.Length(min=8, error="Password must be at least 8 characters long"),
         error_messages={
             "required": "Password is required",
             "null": "Password cannot be empty",

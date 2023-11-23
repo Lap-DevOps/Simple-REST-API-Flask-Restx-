@@ -53,7 +53,7 @@ def posts(app, users):
             post_data = {
                 "title": f"Post {i + 1} by {user.username}",
                 "content": f"Content {i + 1} by {user.username}",
-                "author_id": user.public_id
+                "author_id": user.public_id,
             }
             posts_data.append(post_data)
     with app.app_context():
@@ -74,8 +74,7 @@ def likes(app, users, posts):
         for post in posts:
             # Each user likes 20 posts by other users (excluding their own)
             if user.public_id != post.author_id:
-                created_at = current_time - timedelta(
-                    days=random.randint(1, 10))  # random likes in 10 days
+                created_at = current_time - timedelta(days=random.randint(1, 10))  # random likes in 10 days
                 like = Like(user_id=user.public_id, post_id=post.id, created_at=created_at)
                 db.session.add(like)
     db.session.commit()
@@ -93,31 +92,28 @@ def test_get_all_users_posts(app, client):
     # Create data using fixtures
 
     # Send a GET request to retrieve all users
-    response_users = client.get(
-        "/api/user/", headers={"Authorization": f"Bearer {client.jwt_token}"}
-    )
+    response_users = client.get("/api/user/", headers={"Authorization": f"Bearer {client.jwt_token}"})
 
     # Check that the response status code is 200 OK
     assert response_users.status_code == 200
     #
     # # Check that the response contains the expected number of users
-    assert response_users.json['total'] == 5  # Assuming we have 5 users
+    assert response_users.json["total"] == 5  # Assuming we have 5 users
     #
     # # Send a GET request to retrieve all posts
-    response_posts = client.get(
-        "/api/post/", headers={"Authorization": f"Bearer {client.jwt_token}"}
-    )
+    response_posts = client.get("/api/post/", headers={"Authorization": f"Bearer {client.jwt_token}"})
     #
     # # Check that the response status code is 200 OK
     assert response_posts.status_code == 200
     #
     # # Check that the response contains the expected number of posts
-    assert response_posts.json['total'] == 25  # Assuming we have 25 posts
+    assert response_posts.json["total"] == 25  # Assuming we have 25 posts
     #
     # # Check that each post has 4 likes
     for like_number in range(1, 26):
         response_posts_likes = client.get(
-            f"/api/post/{like_number}", headers={"Authorization": f"Bearer {client.jwt_token}"}
+            f"/api/post/{like_number}",
+            headers={"Authorization": f"Bearer {client.jwt_token}"},
         )
 
         # # Check that the response status code is 200 OK
@@ -125,23 +121,19 @@ def test_get_all_users_posts(app, client):
 
 
 def test_post_likes(app, client):
-    response_posts_likes = client.get(
-        f"/api/post/1", headers={"Authorization": f"Bearer {client.jwt_token}"}
-    )
+    response_posts_likes = client.get(f"/api/post/1", headers={"Authorization": f"Bearer {client.jwt_token}"})
     post = Post.query.get(1)
     assert response_posts_likes.status_code == 200
-    assert len(post.likes) == response_posts_likes.json['likes']
+    assert len(post.likes) == response_posts_likes.json["likes"]
 
 
 def test_likes_analytics(client):
     # Send a GET request to retrieve all likes statistic
-    response_posts_likes = client.get(
-        "/api/analytics/", headers={"Authorization": f"Bearer {client.jwt_token}"}
-    )
+    response_posts_likes = client.get("/api/analytics/", headers={"Authorization": f"Bearer {client.jwt_token}"})
 
     # Check that the response status code is 200 OK
     assert response_posts_likes.status_code == 200
-    assert response_posts_likes.json['total_likes'] == 100
+    assert response_posts_likes.json["total_likes"] == 100
 
 
 def test_user_analytics(client, users):
@@ -153,26 +145,20 @@ def test_user_analytics(client, users):
     assert user.last_api_request is None
 
     # Perform a login request to obtain an access token
-    login_user = client.post(
-        "/api/auth/login", json={"email": "user1@example.com", "password": "password1"}
-    )
+    login_user = client.post("/api/auth/login", json={"email": "user1@example.com", "password": "password1"})
     user_token = login_user.json["access_token"]
 
     # Check that the login request returns a status code of 200 OK
     assert login_user.status_code == 200
 
     # Perform an API request on behalf of the user
-    any_user_api_request = client.get(
-        "/api/user/", headers={"Authorization": f"Bearer {user_token}"}
-    )
+    any_user_api_request = client.get("/api/user/", headers={"Authorization": f"Bearer {user_token}"})
 
     # Check that the API request returns a status code of 200 OK
     assert any_user_api_request.status_code == 200
 
     # Perform an analytics request to retrieve updated user data
-    user_analytics_response = client.get(
-        "/api/analytics/user/1", headers={"Authorization": f"Bearer {user_token}"}
-    )
+    user_analytics_response = client.get("/api/analytics/user/1", headers={"Authorization": f"Bearer {user_token}"})
     user_new_data = user_analytics_response.json
 
     # Check that the analytics request returns a status code of 200 OK
@@ -185,9 +171,6 @@ def test_user_analytics(client, users):
     # Check that the "last login" and "last api request" fields are instances of datetime
     assert isinstance(datetime.fromisoformat(user_new_data["last login"]), datetime)
     assert isinstance(datetime.fromisoformat(user_new_data["last api request"]), datetime)
-
-
-
 
 
 if __name__ == "__main__":

@@ -27,13 +27,9 @@ class StarNaviClient:
 
             try:
                 # Send a POST request to create a new user
-                response = self.api_client.post(
-                    endpoint=request_endpoint, payload=user_data
-                )
+                response = self.api_client.post(endpoint=request_endpoint, payload=user_data)
                 response.raise_for_status()  # Check the response status
-                print(
-                    f"User {index + 1} created successfully. Response status code: {response.status_code}"
-                )
+                print(f"User {index + 1} created successfully. Response status code: {response.status_code}")
             except requests.exceptions.RequestException as e:
                 print(f"Failed to create user {index + 1}. Error: {e}")
 
@@ -45,9 +41,7 @@ class StarNaviClient:
 
                 try:
                     # Send a POST request to create a new post
-                    response = self.api_client.post(
-                        endpoint=request_endpoint, payload=post_data, user=user
-                    )
+                    response = self.api_client.post(endpoint=request_endpoint, payload=post_data, user=user)
                     response.raise_for_status()  # Check the response status
                     print(
                         f"Post {index + 1} for user: {user['username']} created successfully. Response status code: {response.status_code}"
@@ -69,9 +63,7 @@ class StarNaviClient:
 
                 try:
                     # Send a POST request to like a post
-                    response = self.api_client.post(
-                        endpoint=request_endpoint, payload={}, user=user
-                    )
+                    response = self.api_client.post(endpoint=request_endpoint, payload={}, user=user)
                     response.raise_for_status()  # Check the response status
                     print(
                         f"Post id:{random_post} liked successfully by {user['username']} . Response status code: {response.status_code}"

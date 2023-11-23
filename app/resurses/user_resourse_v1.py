@@ -17,12 +17,11 @@ class AllUsers(Resource):
     # Document the expected query parameters for the 'get' operation
     @user_namespace.doc(
         params={"limit": "Limit for pagination", "page": "Page number"},
-        security="jsonWebToken", description="Get a list of all users."
+        security="jsonWebToken",
+        description="Get a list of all users.",
     )
     # Specify the response model and status code for the 'get' operation
-    @user_namespace.marshal_with(
-        all_users_response_model, as_list=False, code=200, mask=None
-    )
+    @user_namespace.marshal_with(all_users_response_model, as_list=False, code=200, mask=None)
     @jwt_required()
     def get(self):
         """Get all users"""
