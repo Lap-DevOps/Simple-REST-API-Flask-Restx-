@@ -189,7 +189,7 @@ class PostResource(Resource):
             db.session.commit()
 
             # Return a success message with a 200 status code
-            return {"message": f"Post with ID {post_id} deleted successfully"}, 200
+            return {"message": f"Post with ID {post_id} deleted successfully"}, 204
 
         except HTTPException as e:
             # Handle exceptions and return a 404 status code on error

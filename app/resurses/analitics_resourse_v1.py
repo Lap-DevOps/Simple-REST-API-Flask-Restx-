@@ -61,9 +61,8 @@ class LikeAnalytic(Resource):
                 .all()
             )
 
-            # Convert the result to a dictionary for the response
             analytics_data = [
-                {"date": row.date.strftime("%Y-%m-%d"), "like_count": row.like_count}
+                {"date": str(row.date), "like_count": row.like_count}
                 for row in result
             ]
 

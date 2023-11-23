@@ -40,10 +40,10 @@ def test_sqlalchemy_database_uri(app):
     assert app.config["SQLALCHEMY_DATABASE_URI"] == "sqlite:///:memory:"
 
 
-def test_example(app):
+def test_swagger(app):
     """Example test using the Flask app."""
     # Your test using the app
-    response = app.test_client().get("/")
+    response = app.test_client().get("/swagger")
     assert response.status_code == 200
 
 

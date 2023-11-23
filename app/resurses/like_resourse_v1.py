@@ -26,10 +26,9 @@ class AllPosts(Resource):
     def post(self, post_id):
         """Like post"""
 
-        # Receive current user id
-        current_user_id = get_jwt_identity()
-
         try:
+            # Receive current user id
+            current_user_id = get_jwt_identity()
             like = Like(user_id=current_user_id, post_id=post_id)
             db.session.add(like)
             db.session.commit()
@@ -53,10 +52,10 @@ class AllPosts(Resource):
     def delete(self, post_id):
         """Remove a like from a specific post."""
 
-        # Receive current user id
-        current_user_id = get_jwt_identity()
-
         try:
+            # Receive current user id
+            current_user_id = get_jwt_identity()
+
             post = Post.query.get_or_404(post_id)
             if post.author_id != current_user_id:
                 abort(403, message=f"Unauthorized: User is not the author of the post")
